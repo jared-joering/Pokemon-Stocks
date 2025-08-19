@@ -2,6 +2,7 @@
 requirements.txt
 config.py
 database.ini
+/data
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
