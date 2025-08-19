@@ -3,11 +3,12 @@ I'm currently developing a project to make sense of the nonsensical: a trading c
 
 Unfortunately, the market has been incredibly volatile as most have lately.  Scalper and resellers are prolifically involved with manipulation and it has just been a hassle to find cards, much less a deal.  So, I thought about how I could help myself and my friends.  Enter this project, where I aim to catalog some 15,000+ cards by logging some specifics into a SQL database through an API and then scraping price points gathered from multiple sources for the past 3 years into a separate, more dynamic table that I can add into with a Python script at weekly, monthly, and semi-annual intervals.  At least, those are my aims.
 
-With all that data in-hand, I plan on conducting an EDA with Python, pandas, seaborn, matplotlib, and more and we'll see where we go from there.  I also plan on using regression analysis and deep learning to try to see if I can map future-trends in the market and capitalize when need be.  All of this and then some is listed below.  This project has barely started 'walking', so a lot of these may never be realized.
+With all that data in-hand, I plan on conducting EDA with Python, pandas, seaborn, matplotlib, and more and we'll see where we go from there.  I also plan on using regression analysis and deep learning to try to see if I can map future-trends in the market and capitalize when need be.  All of this and then some is listed below.  This project has barely started 'walking', so a lot of these may never be realized.
 
+<img src="data\Pokemon MEGA Bank.png", alt="Pokemon MEGA Bank">
 
 ### Project Goals:
-	- Make a database ('Pokemon MEGA Bank') that is shared across all the local computers on my LAN.
+	- Make a database ('Pokemon MEGA Bank') that is
 		* The database will house 15,000 individual rows (cards) immediately, and will grow as new card sets release.
 		* These will be entered in via a script that calls an API which adds to the list every month or so.
 			i. The API will have the immediate prices, but I'm looking for a history and that will be fulfilled via three scrapers.
