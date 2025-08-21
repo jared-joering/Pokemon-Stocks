@@ -38,7 +38,7 @@ Preliminary Pokémon specifics table for the MEGA Bank:
 | name | The name of the card. | string |
 | supertype | The supertype of the card, such as Pokémon, Energy, or Trainer. | string |
 | subtypes | A list of subtypes, such as Basic, EX, Mega, Rapid Strike, etc. | string[] (an array of strings) |
-| set | The set details embedded into the card. | string | - a subheading of "set", known as "name"
+| set_obj | The set details embedded into the card. | string | - a subheading of "set", known as "name"
 | series | The series the set comes from. | string | - a subheading of "set", known as "series"
 | card_number | The specific number of the card. | string |
 | printed_total | The total number of cards in the set. | string |

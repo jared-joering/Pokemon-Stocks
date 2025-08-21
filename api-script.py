@@ -1,6 +1,5 @@
 import requests
-import pandas as pd # we'll use pandas to curate and populate our postgre db 
-from psycopg2 import sql
+import psycopg2
 from config import api # calling the config file I created to hide my API
 from pokemontcgsdk import Card
 from pokemontcgsdk import Set
@@ -13,12 +12,15 @@ headers = {
     "X-API-Key": api
 }
 
-card = Card.find('base1-4')
-print(card.name, card.id)
+# fetch a single card by id (replace with any id you like)
+# card = Card.find("xy1-1")
 
-
-
-# make API request /all
-# using //if// break up variant cards (i.e. reverse and masterball holos) -- I think we'll do this when adding the prices to the cards we put in.
-# print to separate lines
-# check to see //(nested) if// duplicates every 'week', if duplicate: add TCGPlayer prices to the price table
+print("card.id =", card.id)
+print("card.name =", card.name)
+print("type(card.subtypes) =", type(card.subtypes))
+print("card.subtypes =", card.subtypes)
+print(card.set.id)
+print(card.set.name)
+print(type(card.set.printedTotal))
+print(card.set.printedTotal)
+print(card.tcgplayer)
