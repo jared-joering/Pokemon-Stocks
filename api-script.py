@@ -13,7 +13,8 @@ headers = {
     "X-API-Key": api
 }
 
-
+card = Card.find('base1-4')
+print(card.name, card.id)
 
 
 
