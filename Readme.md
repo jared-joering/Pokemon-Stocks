@@ -1,13 +1,12 @@
-### About:
+### About
 I'm currently developing a project to make sense of the nonsensical: a trading card market.  I've long been a fan of Pokémon, stretching back to my days as a kid rewatching the same VHS a hundred times.  When COVID hit, I jumped back into the hobby of collecting cards when I found a ton of them in my closet and ever since then, I've been trying to 'collect 'em all'.
 
 Unfortunately, the market has been incredibly volatile as most have lately.  Scalper and resellers are prolifically involved with manipulation and it has just been a hassle to find cards, much less a deal.  So, I thought about how I could help myself and my friends.  Enter this project, where I aim to catalog some 15,000+ cards by logging some specifics into a SQL database through an API and then scraping price points gathered from multiple sources for the past 3 years into a separate, more dynamic table that I can add into with a Python script at weekly, monthly, and semi-annual intervals.  At least, those are my aims.
 
 With all that data in-hand, I plan on conducting EDA with Python, pandas, seaborn, matplotlib, and more and we'll see where we go from there.  I also plan on using regression analysis and deep learning to try to see if I can map future-trends in the market and capitalize when need be.  All of this and then some is listed below.  This project has barely started 'walking', so a lot of these may never be realized.
 
-<img src="data\Pokemon MEGA Bank.png", alt="Pokemon MEGA Bank">
 
-### Project Goals:
+##### Project Goals:
 	- Make a database ('Pokemon MEGA Bank') that is
 		* The database will house 15,000 individual rows (cards) immediately, and will grow as new card sets release.
 		* These will be entered in via a script that calls an API which adds to the list every month or so.
@@ -27,6 +26,10 @@ With all that data in-hand, I plan on conducting EDA with Python, pandas, seabor
 	- After all of that, and as a bonus difficulty, I'll use more advanced techniques like machine learning (LTSM networks) to capture complex patterns.  I'll also use tools like Tableau for ongoing monitoring so that I can quickly spot changes in market dynamics.
 
 
+##### To-Do (Week #1: 8/18 - 8/24):
+	- Create, test, and load a script that will load all cards into the MEGA Bank
+
+
 ### Data Dictionary(-ies)
 Preliminary Pokémon specifics table for the MEGA Bank:
 | Column Name | Description | Data Type |
@@ -42,3 +45,8 @@ Preliminary Pokémon specifics table for the MEGA Bank:
 | artist | The artist of the card. | string |
 | rarity | The rarity of the card, such as "Common" or "Rare Rainbow". | string |
 ###### Maybe a row for the concatenated number/set?
+
+
+### Changelog:
+8/18 (11:18 AM): Created the repository, the Readme, .gitignore, api-script, data dictionary config file, requirements text, and data folders; began planning
+8/19 (8:03 PM): Updated Readme.md
