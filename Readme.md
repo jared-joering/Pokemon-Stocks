@@ -49,4 +49,5 @@ Preliminary Pokémon specifics table for the MEGA Bank:
 
 ### Changelog:
 8/18 (11:18 AM): Created the repository, the Readme, .gitignore, api-script, data dictionary config file, requirements text, and data folders; began planning
-8/19 (8:03 PM): Updated Readme.md
+8/20 (8:03 PM): Updated Readme.md
+8/20 (9:25 PM): Ran tests on script to (eventually) load data into the SQL database.
