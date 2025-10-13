@@ -14,7 +14,7 @@ headers = {
 
 response = requests.get("https://api.pokemontcg.io/v2/cards", headers=headers)
 present = date.today().strftime("%Y-%m-%d")
-folder_path = "data/logs"
+folder_path = "data/logs/"
 
 # define the directory, the destination, and create if it's not there, otherwise: "Directory already present."
 # def mkdirectory():
