@@ -14,7 +14,7 @@ headers = {
 
 response = requests.get("https://api.pokemontcg.io/v2/cards", headers=headers)
 present = date.today().strftime("%Y-%m-%d")
-folder_path = "data/logs/"
+folder_path = "data/logs"
 
 # define the directory, the destination, and create if it's not there, otherwise: "Directory already present."
 # def mkdirectory():
@@ -33,3 +33,4 @@ if response.status_code == 200: # only proceed if the HTTP request succeeds
         print("Response did not contain valid JSON")
     except Exception as error:
         print("Unexpected error while writing log: ", error)
+
