@@ -1,6 +1,7 @@
 # Custom files and folders for this project
 requirements.txt
 config.py
+test.py
 database.ini
 /data
 
