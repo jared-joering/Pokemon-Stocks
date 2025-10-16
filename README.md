@@ -45,9 +45,3 @@ With all that data in-hand, I plan on conducting EDA with Python, pandas, seabor
 | artist | The artist of the card. | string |
 | rarity | The rarity of the card, such as "Common" or "Rare Rainbow". | string |
 ###### Maybe a row for the concatenated number/set?
-
-
-### Changelog:
-8/18 (11:18 AM): Created the repository, the Readme, .gitignore, api-script, data dictionary config file, requirements text, and data folders; began planning
-8/20 (8:03 PM): Updated Readme.md
-8/20 (9:25 PM): Ran tests on script to (eventually) load data into the SQL database.
