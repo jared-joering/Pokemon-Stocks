@@ -33,7 +33,7 @@ def mkentries():
 
     response = sesh.get("https://api.pokemontcg.io/v2/cards", headers = headers)
 
-    starting_page = 38 # setting the page number
+    starting_page = 1 # setting the page number
 
     if response.status_code == 200: # only proceed if the HTTP request succeeds
         data = response.json()
@@ -59,16 +59,9 @@ def mkentries():
             except Exception as error:
                 print("Unexpected error while writing log: ", error)
 
+5
+
 if __name__ == "__main__":
     mkdirectory()  # ensure the logs folder exists
     mkentries()    # run the API scraping/logging
-
-'''# def JSON_merger(totalFiles, final_log):
-totalFiles = os.listdir(folder_path)
-merged_data = []
-for flog_path in totalFiles:
-    with open(flog_path, "r") as flog:
-        data = json.load(flog)
-        merged_data.append(data)
-    with open(f"final_log_{present}.json", "x") as final_log:
-        json.dump(merged_data, final_log)'''
+    # JSON_merge(totalFiles, final_log)
