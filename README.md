@@ -31,7 +31,7 @@ With all that data in-hand, I plan on conducting EDA with Python, pandas, seabor
 
 
 ### Data Dictionary(-ies)
-Preliminary Pokémon specifics table for the MEGA Bank:
+'cards' table:
 | Column Name | Description | Data Type |
 | --- | --- | --- |
 | id | Unique identifier for the object. | string | - PK
