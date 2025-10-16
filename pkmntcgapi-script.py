@@ -59,7 +59,18 @@ def mkentries():
             except Exception as error:
                 print("Unexpected error while writing log: ", error)
 
-5
+'''totalFiles = len(os.listdir(folder_path))
+
+def JSON_merger(totalFiles, final_log):
+    if folder_path == allPages + 1:
+        merged_data = []
+        
+        for flog_path in totalFiles:
+            with open(flog_path, "r") as flog:
+            data = json.load(flog)
+            merged_data.append(data)
+            with open(f"final_log_{present}.json", "x") as final_log:
+            json.dump(merged_data, final_log)'''
 
 if __name__ == "__main__":
     mkdirectory()  # ensure the logs folder exists
