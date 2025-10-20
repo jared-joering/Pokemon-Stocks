@@ -34,7 +34,7 @@ With all that data in-hand, I plan on conducting EDA with Python, pandas, seabor
 'cards' table:
 | Column Name | Description | Data Type |
 | --- | --- | --- |
-| id | Unique identifier for the object. | string | - PK
+| id | Unique identifier for the object. | string | - Primary Key
 | name | The name of the card. | string |
 | supertype | The supertype of the card, such as Pokémon, Energy, or Trainer. | string |
 | subtypes | A list of subtypes, such as Basic, EX, Mega, Rapid Strike, etc. | string[] (an array of strings) |
@@ -44,4 +44,5 @@ With all that data in-hand, I plan on conducting EDA with Python, pandas, seabor
 | printed_total | The total number of cards in the set. | string |
 | artist | The artist of the card. | string |
 | rarity | The rarity of the card, such as "Common" or "Rare Rainbow". | string |
-###### Maybe a row for the concatenated number/set?
+
+'prices' table:
