@@ -1,12 +1,12 @@
 import psycopg2
 import json
-from configparser import configparser
+from configparser import ConfigParser
 
 def config(filename="database.ini", section="postgresql"):
-    parser = configparser # creating parser
+    parser = ConfigParser() # creating parser
     parser.read(filename) # reading the .ini file
-
     db = {}
+
     if parser.has_section(section):
         params = parser.items(section)
         for param in params:
@@ -15,10 +15,20 @@ def config(filename="database.ini", section="postgresql"):
     else:
         raise Exception("Section {0} not found in the {1} file".format(section, filename))
     
-    return db
+    try:
+        conn = psycopg2.connect(**db)
+        print("Database connected successfully.")
+    except:
+        print("Database not connected successfully.")
 
-def psyco_path()
+    return conn
+
+
+def psyco_path():
     user_file=input("Please choose the file you wish to enter into the database: ")
+
+    conn = config()
+    cur = conn.cursor()
 
     with open(user_file, "r", encoding="utf-8") as f:
         for line in f:
@@ -38,4 +48,3 @@ def psyco_path()
                 set_pt = set_object.get("printedTotal", None)
                 artist = card.get("artist", None)
                 rarity = card.get("rarity", None)
-
