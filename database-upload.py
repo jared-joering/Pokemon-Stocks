@@ -1,3 +1,6 @@
+# TODO: Fix Tkinter
+# TODO: Run duplicate checker
+
 import psycopg2
 import json
 from tkinter import Tk, filedialog
@@ -6,7 +9,7 @@ from configparser import ConfigParser
 def config(filename="database.ini", section="postgresql"):
     parser = ConfigParser() # creating parser
     parser.read(filename) # reading the .ini file
-    db = {}
+    db = {} # empty dictionary for database
 
     if parser.has_section(section):
         params = parser.items(section)
@@ -26,34 +29,30 @@ def config(filename="database.ini", section="postgresql"):
     return conn
 
 
-def psyco_path():
-    Tk().withdraw()
-    user_file=filedialog.askopenfilename(
-        title="Please choose the file you wish to enter into the database",
-        filetypes=[("NDJSON files", "*.ndjson"), ("All files", "*.*")]
-    )
+def psyco_path(): # the full insertion program, much of this is pretty self explanatory
+    user_file = input("Enter the full (or relative) path to the NDJSON file to merge: ")
 
     if not user_file:
         print("No file selected, exiting.")
         return
 
-    conn = config()
-    cur = conn.cursor()
+    conn = config() # connecting to db
+    cur = conn.cursor() # creating the cursor
 
     insert_query = """
 INSERT INTO card (id, name, supertype, subtypes, set_name, series, card_number, printed_total, artist, rarity)
 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
 ON CONFLICT (id) DO NOTHING
-"""
+""" # insertion into the tables
 
-    with open(user_file, "r", encoding="utf-8") as f:
+    with open(user_file, "r", encoding="utf-8") as f: # reading out the merge files
         for line in f:
             line = line.strip()
             if not line:
                 continue
             row = json.loads(line)
 
-            for card in row.get("data", []):
+            for card in row.get("data", []): # literating through all the 'card' objects
                 card_id = card["id"]
                 name = card["name"]
                 supertype = card["supertype"]
@@ -65,7 +64,7 @@ ON CONFLICT (id) DO NOTHING
                 artist = card.get("artist", None)
                 rarity = card.get("rarity", None)
 
-                cur.execute(insert_query, (
+                cur.execute(insert_query, ( # writing said 'card' objects
                     card_id,
                     name,
                     supertype,
@@ -78,11 +77,10 @@ ON CONFLICT (id) DO NOTHING
                     rarity
                 ))
     
-    conn.commit()
+    conn.commit() # wrapping up
     cur.close()
     conn.close()
-    print("Finished inserting records into database, closing connection...")
+    print("Finished inserting records into database, closing connection.")
 
-
-if __name__ == "__main__":
+if __name__ == "__main__": # calling
     psyco_path()
