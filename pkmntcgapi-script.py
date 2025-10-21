@@ -1,5 +1,5 @@
 # TODO: Create a loop back around to start reloading missed files again
-# TODO: Don't create empty files when the script fails
+# TODO: Don't create empty files when the script fails on ValueError
 
 import requests
 import json
@@ -24,7 +24,7 @@ def mkdirectory():
 
 def mkentries():
     sesh = requests.Session() # creating a session to persist certain things across requests
-    retries = Retry(
+    retries = Retry( # creating the retry vehicle
         total = 5,
         backoff_factor = 1,
         status_forcelist = [ 429, 500, 502, 503, 504 ],
@@ -43,7 +43,7 @@ def mkentries():
         pageSize = data["pageSize"]
         totalCount = data["totalCount"]
 
-        allPages = math.ceil(totalCount/pageSize)
+        allPages = math.ceil(totalCount/pageSize) # calculating total pages for the loop
     
         for pages in range(starting_page, allPages + 1):
             step_response = sesh.get(f"https://api.pokemontcg.io/v2/cards?page={pages}&pageSize=250", headers = headers, timeout = (10.0, 90.0)) # a new response URL to include both page number and size
@@ -55,7 +55,7 @@ def mkentries():
             
                 time.sleep(10.0)
             
-            except FileExistsError:
+            except FileExistsError: # running a few important error checkers and a general error
                 print("Log already exists")
             except ValueError:
                 print("Response did not contain valid JSON")
@@ -64,5 +64,5 @@ def mkentries():
 
 if __name__ == "__main__":
     mkdirectory()  # ensure the logs folder exists
-    mkentries()    # run the API scraping/logging
+    mkentries()    # run the API crawling/logging
     # JSON_merge(totalFiles, final_log)
