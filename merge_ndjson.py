@@ -1,12 +1,38 @@
+# TODO: Put a success/fail prompt
+
 import os, json
 from datetime import date, timedelta
 
+'''
+Find and validate a user-chosen source folder to merge the files, and
+deposit them in the 'merged' folder.
+'''
+
+def find_folder():
+    user_input = input("Please enter the path where your desired files are located (default path is 'data/logs'): ") # asking for user input
+    source = user_input or "data/logs" # ... or defaulting to our default directory
+    
+    if not os.path.exists(source): # error for no path existing
+        print("Path does not exist.")
+        return None
+    
+    if not os.path.isdir(source):
+        print("That is a file, not a folder.") # accidentally, or otherwise, choosing a file instead of a directory
+        return None
+
+    json_files = [f for f in os.listdir(source) if f.endswith(".json")] # using a similar for-loop used in an earlier file to...
+
+    if not json_files: # find if the folder even contains .json files
+        print("There are no mergeable files in this folder.")
+        return None
+
+    return source
+    
 ''' 
 Retrieve the 'work week' when TCGPlayer used to roll over their price 
 tracking.  It was usually on a Wednesday, which means it stopped on
 Tuesday.  This is for the label alone and for a weekly pull.
 '''
-
 
 def week_date():
     today = date.today() # getting what today is
@@ -28,7 +54,11 @@ before committing to the final draft.
 '''
 
 def NDJSON_merge():
-    source = "data/logs"
+    source = find_folder()
+    if source is None:
+        print("Cancelling merge.")
+        return
+
     dest = "data/merged"
     filename = week_date()
     combined = f"{dest}/{filename}" # the final, merged file
