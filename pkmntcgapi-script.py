@@ -51,8 +51,8 @@ def mkentries():
     response = sesh.get("https://api.pokemontcg.io/v2/cards", headers = headers)
 
     starting_page = 1 # setting the starting page number
-
-    if response.status_code == 200: # only proceed if the HTTP request succeeds
+ 
+    if response.status_code == 200: # only proceed if the H-TTP request succeeds
         data = response.json()
         pageSize = data["pageSize"] # taking the page size...
         totalCount = data["totalCount"] # ... and the total amount of 'cards'...
