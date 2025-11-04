@@ -50,9 +50,9 @@ def psyco_path():
     conn = config() # connecting to db
     cur = conn.cursor() # creating the cursor
 
-    insert_query = """INSERT INTO card (id, name, supertype, subtypes, set_name, series, card_number, printed_total, artist, rarity)
+    insert_query = """INSERT INTO cards (card_id, name, supertype, subtypes, set_name, series, card_number, printed_total, artist, rarity)
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-    ON CONFLICT (id) DO NOTHING
+    ON CONFLICT (card_id) DO NOTHING
     """ # insertion into the tables
 
     with open(user_file, "r", encoding="utf-8") as f: # reading out the merge files
