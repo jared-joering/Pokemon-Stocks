@@ -48,8 +48,8 @@ def psyco_price_path():
     conn = config() # connecting to db
     cur = conn.cursor() # creating the cursor
 
-    insert_query = """INSERT INTO price (id, source, pricing_date, variant, price, source_url, raw, created on)
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    insert_query = """INSERT INTO price (card_id, source, variant, condition_txt, price_date, market_price, low_price, mid_price, high_price, raw_json)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
 
     with open (user_file, "r", encoding="utf-8") as f:
@@ -60,26 +60,29 @@ def psyco_price_path():
             row = json.loads(line)
 
             for card in row.get("data", []): # literating through all the 'card' objects
-                card_id = card["id"]
-                subtypes = card.get("subtypes") or [] # subtypes can be multiple or there can be none -- this also allows for us to more easily search with SQL
-                set_object = card.get("set", {})
-                set_series = set_object.get("series", None) # as with subtypes and the others below - just in case - there could be empty results from this, so we account for it
-                card_number = card.get("number", None)
-                set_pt = set_object.get("printedTotal", None)
-                artist = card.get("artist", None)
-                rarity = card.get("rarity", None)
+                card_id = card["id"] # foreign key
+                source = "TCGPlayer"
+                condition_txt = "Near Mint"
+                price_date = card.tcgplayer("updatedAt")
+                prices_blob = card.tcgplayer.get("prices", {})
+                variant = for new_row in card.tcgplayer("TCGPrices")
+                market_price = 
+                low_price = 
+                mid_price = 
+                high_price = 
+                raw_json = 
 
                 cur.execute(insert_query, ( # writing said 'card' objects
                     card_id,
-                    name,
-                    supertype,
-                    subtypes,
-                    set_object.get("name", None),
-                    set_series,
-                    card_number,
-                    set_pt,
-                    artist,
-                    rarity
+                    source,
+                    variant,
+                    condition_txt,
+                    price_date,
+                    market_price,
+                    low_price,
+                    mid_price,
+                    high_price,
+                    raw_json
                 ))
     
     conn.commit() # wrapping up
@@ -87,5 +90,7 @@ def psyco_price_path():
     conn.close()
     print("Finished inserting records into database, closing connection.")
 
+'''
 if __name__ == "__main__": # calling
-    psyco_path()
+    psyco_price_path()
+'''
