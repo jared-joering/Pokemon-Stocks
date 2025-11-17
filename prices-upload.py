@@ -1,11 +1,13 @@
-import os
-import json
-import datetime as dt
-import configparser as ConfigParser
+# TODO: Fix Tkinter
+# TODO: Run duplicate checker
+
 import psycopg2
+import json
+from configparser import ConfigParser
 
 '''
-Do a similar deal as we did with the database-upload
+Running a function to take all key-value pairs in a config file 
+and save them for later.
 '''
 
 def config(filename="database.ini", section="postgresql"):
@@ -31,14 +33,14 @@ def config(filename="database.ini", section="postgresql"):
     return conn
 
 '''
-Again, much like the database-upload.py, we will be prompting the 
-user for a file to insert into the database.  If they don't select
-it, we kill the operation.  From there, we utilize the conn(ect) we
-created earlier and create a cursor that allows us to insert all of
-the files that we literate through before cutting and closing down.
+The full insertion bit: we prompt the user for a file to insert
+into the database.  If they don't select it, we kill the operation.
+From there, we utilize the conn(ect) we created earlier and create 
+a cursor that allows us to insert all of the files that we literate
+through before cutting and closing down.
 '''
 
-def psyco_price_path():
+def psyco_path():
     user_file = input("Enter the full (or relative) path to the NDJSON file to merge: ")
 
     if not user_file:
@@ -48,41 +50,41 @@ def psyco_price_path():
     conn = config() # connecting to db
     cur = conn.cursor() # creating the cursor
 
-    insert_query = """INSERT INTO price (card_id, source, variant, condition_txt, price_date, market_price, low_price, mid_price, high_price, raw_json)
+    insert_query = """INSERT INTO cards (card_id, name, supertype, subtypes, set_name, series, card_number, printed_total, artist, rarity)
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-    """
+    ON CONFLICT (card_id) DO NOTHING
+    """ # insertion into the tables
 
-    with open (user_file, "r", encoding="utf-8") as f:
+    with open(user_file, "r", encoding="utf-8") as f: # reading out the merge files
         for line in f:
-            line = line.strip()
+            line = line.strip() # stripping white space
             if not line:
                 continue
             row = json.loads(line)
 
             for card in row.get("data", []): # literating through all the 'card' objects
-                card_id = card["id"] # foreign key
-                source = "TCGPlayer"
-                condition_txt = "Near Mint"
-                price_date = card.tcgplayer("updatedAt")
-                prices_blob = card.tcgplayer.get("prices", {})
-                variant = for new_row in card.tcgplayer("TCGPrices")
-                market_price = 
-                low_price = 
-                mid_price = 
-                high_price = 
-                raw_json = 
+                card_id = card["id"]
+                name = card["name"]
+                supertype = card["supertype"]
+                subtypes = card.get("subtypes") or [] # subtypes can be multiple or there can be none -- this also allows for us to more easily search with SQL
+                set_object = card.get("set", {})
+                set_series = set_object.get("series", None) # as with subtypes and the others below - just in case - there could be empty results from this, so we account for it
+                card_number = card.get("number", None)
+                set_pt = set_object.get("printedTotal", None)
+                artist = card.get("artist", None)
+                rarity = card.get("rarity", None)
 
                 cur.execute(insert_query, ( # writing said 'card' objects
                     card_id,
-                    source,
-                    variant,
-                    condition_txt,
-                    price_date,
-                    market_price,
-                    low_price,
-                    mid_price,
-                    high_price,
-                    raw_json
+                    name,
+                    supertype,
+                    subtypes,
+                    set_object.get("name", None),
+                    set_series,
+                    card_number,
+                    set_pt,
+                    artist,
+                    rarity
                 ))
     
     conn.commit() # wrapping up
@@ -90,7 +92,5 @@ def psyco_price_path():
     conn.close()
     print("Finished inserting records into database, closing connection.")
 
-'''
 if __name__ == "__main__": # calling
-    psyco_price_path()
-'''
+    psyco_path()

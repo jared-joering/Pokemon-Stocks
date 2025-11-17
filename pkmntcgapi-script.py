@@ -50,7 +50,7 @@ def mkentries():
 
     response = sesh.get("https://api.pokemontcg.io/v2/cards", headers = headers)
 
-    starting_page = 1 # setting the starting page number
+    starting_page = 1  # setting the starting page number (can change if you need to)
  
     if response.status_code == 200: # only proceed if the H-TTP request succeeds
         data = response.json()
