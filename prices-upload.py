@@ -42,7 +42,7 @@ write through the variants.
 
 def psyco_price_path():
     user_file = input("Enter the full (or relative) path to the NDJSON file to merge: ")
-    skipped = 0
+    skipped = 0 # initializing the 'skipped' variable for later use in finding what records were skipped
 
     if not user_file:
         print("No file selected, exiting.")
