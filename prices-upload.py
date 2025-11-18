@@ -36,6 +36,8 @@ user for a file to insert into the database.  If they don't select
 it, we kill the operation.  From there, we utilize the conn(ect) we
 created earlier and create a cursor that allows us to insert all of
 the files that we literate through before cutting and closing down.
+Additionally, I also had to move the cursor inside the for loop to 
+write through the variants.
 '''
 
 def psyco_price_path():
