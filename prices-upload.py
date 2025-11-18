@@ -1,13 +1,11 @@
-# TODO: Fix Tkinter
-# TODO: Run duplicate checker
-
-import psycopg2
+import os
 import json
-from configparser import ConfigParser
+import datetime as dt
+import configparser as ConfigParser
+import psycopg2
 
 '''
-Running a function to take all key-value pairs in a config file 
-and save them for later.
+Do a similar deal as we did with the database-upload
 '''
 
 def config(filename="database.ini", section="postgresql"):
@@ -33,15 +31,16 @@ def config(filename="database.ini", section="postgresql"):
     return conn
 
 '''
-The full insertion bit: we prompt the user for a file to insert
-into the database.  If they don't select it, we kill the operation.
-From there, we utilize the conn(ect) we created earlier and create 
-a cursor that allows us to insert all of the files that we literate
-through before cutting and closing down.
+Again, much like the database-upload.py, we will be prompting the 
+user for a file to insert into the database.  If they don't select
+it, we kill the operation.  From there, we utilize the conn(ect) we
+created earlier and create a cursor that allows us to insert all of
+the files that we literate through before cutting and closing down.
 '''
 
-def psyco_path():
+def psyco_price_path():
     user_file = input("Enter the full (or relative) path to the NDJSON file to merge: ")
+    skipped = 0
 
     if not user_file:
         print("No file selected, exiting.")
@@ -50,42 +49,50 @@ def psyco_path():
     conn = config() # connecting to db
     cur = conn.cursor() # creating the cursor
 
-    insert_query = """INSERT INTO cards (card_id, name, supertype, subtypes, set_name, series, card_number, printed_total, artist, rarity)
+    insert_query = """INSERT INTO prices (card_id, source, variant, condition_txt, updated_at, market_price, low_price, mid_price, high_price, raw_json)
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-    ON CONFLICT (card_id) DO NOTHING
-    """ # insertion into the tables
+    ON CONFLICT (card_id, source, variant, updated_at) DO NOTHING
+    """
 
-    with open(user_file, "r", encoding="utf-8") as f: # reading out the merge files
+    with open (user_file, "r", encoding="utf-8") as f:
         for line in f:
-            line = line.strip() # stripping white space
+            line = line.strip()
             if not line:
                 continue
             row = json.loads(line)
 
             for card in row.get("data", []): # literating through all the 'card' objects
-                card_id = card["id"]
-                name = card["name"]
-                supertype = card["supertype"]
-                subtypes = card.get("subtypes") or [] # subtypes can be multiple or there can be none -- this also allows for us to more easily search with SQL
-                set_object = card.get("set", {})
-                set_series = set_object.get("series", None) # as with subtypes and the others below - just in case - there could be empty results from this, so we account for it
-                card_number = card.get("number", None)
-                set_pt = set_object.get("printedTotal", None)
-                artist = card.get("artist", None)
-                rarity = card.get("rarity", None)
+                card_id = card["id"] # foreign key
+                source = "tcgplayer"
+                condition_txt = "Near Mint" # all cards in the database are 'near mint' priced, this also gives me a ceiling
+                tcgp = card.get("tcgplayer") # getting the tcgplayer portion of the API for the subheaders
+                if tcgp == None:
+                    print(f"Warning: 'tcgplayer' subheading for {card_id}")
+                    skipped += 1
+                    continue
+                updated_at_raw = tcgp.get("updatedAt")
+                updated_at = dt.datetime.strptime(updated_at_raw, "%Y/%m/%d").date()
+                prices_blob = tcgp.get("prices", {}) # this is the collection of variant name, prices all held together by a dictionary
+                for variant_name, variant_obj in prices_blob.items():
+                    variant = variant_name
+                    market_price = variant_obj.get("market")
+                    low_price = variant_obj.get("low")
+                    mid_price = variant_obj.get("mid")
+                    high_price = variant_obj.get("high")
+                    raw_json = json.dumps(variant_obj)
 
-                cur.execute(insert_query, ( # writing said 'card' objects
-                    card_id,
-                    name,
-                    supertype,
-                    subtypes,
-                    set_object.get("name", None),
-                    set_series,
-                    card_number,
-                    set_pt,
-                    artist,
-                    rarity
-                ))
+                    cur.execute(insert_query, ( # writing 'prices' objects in the 'for' loop for each variant
+                        card_id,
+                        source,
+                        variant,
+                        condition_txt,
+                        updated_at,
+                        market_price,
+                        low_price,
+                        mid_price,
+                        high_price,
+                        raw_json
+                    ))
     
     conn.commit() # wrapping up
     cur.close()
@@ -93,4 +100,4 @@ def psyco_path():
     print("Finished inserting records into database, closing connection.")
 
 if __name__ == "__main__": # calling
-    psyco_path()
+    psyco_price_path()
