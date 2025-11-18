@@ -1,7 +1,7 @@
 import os
 import json
 import datetime as dt
-import configparser as ConfigParser
+import configparser
 import psycopg2
 
 '''
@@ -9,7 +9,7 @@ Do a similar deal as we did with the database-upload
 '''
 
 def config(filename="database.ini", section="postgresql"):
-    parser = ConfigParser() # creating parser
+    parser = configparser.ConfigParser() # creating parser
     parser.read(filename) # reading the .ini file
     db = {} # empty dictionary for database
 
