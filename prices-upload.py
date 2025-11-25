@@ -1,3 +1,5 @@
+# TODO: (MOST IMPORTANT) MAKE SURE YOU CHECK FOR PRICES ALREADY ENTERED
+
 import os
 import json
 import datetime as dt
