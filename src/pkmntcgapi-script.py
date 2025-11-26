@@ -52,7 +52,7 @@ def mkentries():
 
     starting_page = 1  # setting the starting page number (can change if you need to)
  
-    if response.status_code == 200: # only proceed if the H-TTP request succeeds
+    if response.status_code == 200: # only proceed if the HTTP request succeeds
         data = response.json()
         pageSize = data["pageSize"] # taking the page size...
         totalCount = data["totalCount"] # ... and the total amount of 'cards'...
